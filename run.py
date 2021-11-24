@@ -1,25 +1,23 @@
 import psycopg2
-from bs4 import BeautifulSoup
-from selenium import webdriver
+#from bs4 import BeautifulSoup
+#from selenium import webdriver
 import time
 from datetime import datetime
 from datetime import date
-from selenium.webdriver.common.keys import Keys
+#from selenium.webdriver.common.keys import Keys
 import csv
 import pandas as pd
 import datetime
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+#from selenium import webdriver
+#from selenium.webdriver.chrome.options import Options
+#from selenium.webdriver.support.ui import WebDriverWait
+#from selenium.webdriver.support import expected_conditions as EC
+#from selenium.common.exceptions import TimeoutException
 from config.config import configs
-import time
-import psycopg2
 from ftplib import FTP
 from datetime import datetime,timedelta
 import pytz
-from selenium.common.exceptions import NoSuchElementException
+#from selenium.common.exceptions import NoSuchElementException
 import os
 
 import pandas as pd
@@ -257,6 +255,7 @@ def update_database():
         mycol.insert({'date': find_next_date(date_)})
     else:
         mycol.remove({'date': find_next_date(date_)})
+        mycol.insert({'date': find_next_date(date_)})
 
     file_name = path_string(find_next_date(date_)) + "--"
     if os.path.exists(r'{0}'.format(file_name)):
@@ -521,6 +520,7 @@ def get_symbol(date_, symbol):
 
 def update_real(date_):
     cusor = mycol.find_one({'date': date_})
+    print('Tại sao lại thế',cusor)
     gia_tri = 0
     gia_tri_tt = 0
     tong_mua = 0

@@ -568,7 +568,7 @@ def run_update_real():
 
     update_real(date_)
 if __name__ == "__main__":
-
+    time.sleep(900)
     run_update_real()
 
 

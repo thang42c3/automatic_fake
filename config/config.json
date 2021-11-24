@@ -1,0 +1,26 @@
+{"info_schedule":
+    {"schedule_hour": "9",
+    "schedule_minute": "30"},
+    "info_sys_email":
+  {"email_address": "autotradestock@gmail.com",
+    "email_pass": "epgzrymjtiiqsarc"},
+  "info_fpt":
+  {"ftp_ip":"45.124.84.24",
+    "ftp_user":"ftp_owner",
+    "ftp_password":"ftp123",
+    "ftp_file_path": "/export/",
+    "fpt_file_name": "EMA20_B30_"
+  },
+  "mail_admin": "tqvinhtin2@gmail.com",
+"ssi_web_link": "https://webtrading.ssi.com.vn/",
+  "upcom_delta": "0.2",
+  "file_current_symbol": "symbol.csv",
+  "URI_MONGO": "mongodb+srv://ducthangbnn:Oivung1215@cluster0.1rpru.mongodb.net/test?ssl=true&ssl_cert_reqs=CERT_NONE",
+  "URI_MONGO_VINH": "mongodb://tublood:tublood@45.124.84.24:27017",
+  "DATABASE": "stocks",
+  "COLLECTION": "test",
+  "COLLECTION_TEST": "test",
+  "DATE_TEST_FIRST": "20210909",
+  "DATE_TEST_SECOND": "20210910",
+  "SYMBOL_TEST": "DDV"
+}

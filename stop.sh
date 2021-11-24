@@ -1,0 +1,1 @@
+systemctl stop auto_trade.service

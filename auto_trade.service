@@ -1,0 +1,13 @@
+[Unit] 
+Description=Autotrade Service 
+After=syslog.target
+ 
+[Service] 
+Type=simple
+Restart=always
+RestartSec=5s
+WorkingDirectory=/home/tvinh/auto_trade
+ExecStart=/home/tvinh/auto_trade/autotrade_service.py
+ 
+[Install] 
+WantedBy=multi-user.target

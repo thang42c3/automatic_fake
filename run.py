@@ -241,8 +241,7 @@ def update_database():
     date_ = datetime.now()
     date_ = date_.strftime("%Y%m%d")
     print(date_)
-    date_ = find_previous_date(date_)
-    print(date_)
+
     utility.ftp_file(config["info_fpt"]["ftp_ip"], config["info_fpt"]["ftp_user"], config["info_fpt"]["ftp_password"])
     print("OK")
     f_result = stock_data("", date_)
@@ -250,6 +249,8 @@ def update_database():
 
 #    f_result = stock_data("", find_next_date(date_))
     print(f_result)
+    date_ = find_previous_date(date_)
+    print(date_)
     query = mycol.find_one({"date": find_next_date(date_)})
     if query is None:
         mycol.insert({'date': find_next_date(date_)})

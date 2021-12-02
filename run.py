@@ -154,10 +154,6 @@ def buysell(symbol, change, exp_holding, date_):
     else:
         ck_tong, ck_kha_dung, muat0, muat1, muat2, ck_doi_ban, bant0, bant1, bant2, gia_tb = get_symbol(date_, symbol)
         print('Ma chung khoan', symbol,  ck_kha_dung, muat0, muat1, muat2, 'chung khoan doi ban', ck_doi_ban)
-        ck_tong = int(ck_tong.replace(".","")); ck_kha_dung = int(ck_kha_dung.replace(".","")); muat0 = int(muat0.replace(".",""))
-        muat1 = int(muat1.replace(".","")); muat2 = int(muat2.replace(".","")); ck_doi_ban = int(ck_doi_ban)
-        bant0 = int(bant0.replace(".","")); bant1 = int(bant1.replace(".","")); bant2 = int(bant2.replace(".",""))
-        gia_tb = float(gia_tb.replace(",","."))
         ck_kha_dung = ck_kha_dung + muat2
         muat2 = muat1
         muat1 = muat0
@@ -177,6 +173,7 @@ def buysell(symbol, change, exp_holding, date_):
             else:
                 change = 0
 
+    ck_tong = ck_tong + change
 
     if change > 0:
         muat0 = change; bant0 = 0
@@ -544,7 +541,7 @@ def run_update_real():
 
     update_real(date_)
 if __name__ == "__main__":
-    time.sleep(900)
+#    time.sleep(900)
     run_update_real()
 
 

@@ -137,11 +137,12 @@ def changedot(str):
     str = str.replace(",",".")
     return str
 
-def buysell(symbol, change, date_):
+def buysell(symbol, change, exp_holding, date_):
 
     query = mycol_real.find_one({"$and": [{"date": date_},
                   {"stocks_info.{0}".format(symbol): {"$exists": True}}]})
     change = change * 100
+    exp_holding = exp_holding*100
     print(change)
     # Chưa có cổ phiếu trước đó
     if query is None:
@@ -153,57 +154,29 @@ def buysell(symbol, change, date_):
     else:
         ck_tong, ck_kha_dung, muat0, muat1, muat2, ck_doi_ban, bant0, bant1, bant2, gia_tb = get_symbol(date_, symbol)
         print('Ma chung khoan', symbol,  ck_kha_dung, muat0, muat1, muat2, 'chung khoan doi ban', ck_doi_ban)
-        ck_tong = int(ck_tong); ck_kha_dung = int(ck_kha_dung); muat0 = int(muat0)
-        muat1 = int(muat1); muat2 = int(muat2); ck_doi_ban = int(ck_doi_ban)
-        bant0 = int(bant0); bant1 = int(bant1); bant2 = int(bant2)
-        gia_tb = float(gia_tb)
+        ck_tong = int(ck_tong.replace(".","")); ck_kha_dung = int(ck_kha_dung.replace(".","")); muat0 = int(muat0.replace(".",""))
+        muat1 = int(muat1.replace(".","")); muat2 = int(muat2.replace(".","")); ck_doi_ban = int(ck_doi_ban)
+        bant0 = int(bant0.replace(".","")); bant1 = int(bant1.replace(".","")); bant2 = int(bant2.replace(".",""))
+        gia_tb = float(gia_tb.replace(",","."))
         ck_kha_dung = ck_kha_dung + muat2
         muat2 = muat1
         muat1 = muat0
         bant2 = bant1
         bant1 = bant0
-        if change >= 0:
-            if change <= ck_doi_ban:
-                # Trường hợp số lượng bán mua hơn số lượng đợi bán, sẽ đưa chứng khoán mua về 0.
-                # Giảm số lượng ck_doi_ban 1 lượng số lượng mua.
-                print('Change', change)
-                print('CK doi ban', ck_doi_ban)
-                ck_doi_ban = ck_doi_ban - change
-                bant0 = 0
-                change = 0
+        if ck_tong > exp_holding:
+            if ck_kha_dung < ck_tong - exp_holding:
+                change = -ck_kha_dung
             else:
-                # Trường hợp số lượng mua nhiều hơn số lượng đợi bán, sẽ bán bằng hiệu số lượng mua và bán
-                # Chứng khoán đợi bán sẽ về 0
-                change = change - ck_doi_ban;
-                ck_doi_ban = 0
-                ck_tong = ck_tong + change;
-
-        elif change < 0:
-            change = abs(change)
-            if ck_kha_dung < change:
-                ck_tong = ck_tong - ck_kha_dung;
-                ck_doi_ban = ck_doi_ban + change - ck_kha_dung
-                change = ck_kha_dung
-                ck_kha_dung = 0
-                print(symbol, 'chung khoan kha dung', change)
-
-            else:
-                ck_tong = ck_tong - change; ck_kha_dung = ck_kha_dung - change
-
-            change = -change
-
-        # Bán chứng khoán đợi bán trong trường hợp còn chứng khoán khả dụng
-        if ck_kha_dung >= ck_doi_ban:
-            ck_tong = ck_tong - ck_doi_ban
-            ck_kha_dung = ck_kha_dung - ck_doi_ban
-            change = change - ck_doi_ban
-            ck_doi_ban = 0
-
+                change = - (ck_tong - exp_holding)
         else:
-            ck_tong = ck_tong - ck_kha_dung
-            ck_doi_ban = ck_doi_ban - ck_kha_dung
-            change = change - ck_kha_dung
-            ck_kha_dung = 0
+            if change > 0:
+                if change + ck_tong > exp_holding:
+                    change = exp_holding - ck_tong
+                else:
+                    change = change
+            else:
+                change = 0
+
 
     if change > 0:
         muat0 = change; bant0 = 0
@@ -233,6 +206,8 @@ def buysell(symbol, change, date_):
 
     print(ck_tong, ck_kha_dung, muat0, muat1, muat2, ck_doi_ban)
     return round(change / 100), ck_tong, ck_kha_dung, muat0, muat1, muat2, ck_doi_ban
+
+
 
 
 

@@ -175,10 +175,12 @@ def buysell(symbol, change, exp_holding, date_):
 
     ck_tong = ck_tong + change
 
+
     if change > 0:
         muat0 = change; bant0 = 0
     elif change < 0:
         bant0 = abs(change); muat0 =0
+        ck_kha_dung = ck_kha_dung+ change
     else:
         muat0 = 0; bant0 = 0
 
@@ -206,23 +208,20 @@ def buysell(symbol, change, exp_holding, date_):
 
 
 
-
-
-
 def update_database():
     date_ = datetime.now()
     date_ = date_.strftime("%Y%m%d")
-    print(date_)
+
 
     utility.ftp_file(config["info_fpt"]["ftp_ip"], config["info_fpt"]["ftp_user"], config["info_fpt"]["ftp_password"])
     print("OK")
     f_result = stock_data("", date_)
+
 #    f_result = stock_data(config["info_fpt"]["ftp_file_path"], find_next_date(date_))
 
 #    f_result = stock_data("", find_next_date(date_))
     print(f_result)
-    date_ = find_previous_date(date_)
-    print(date_)
+    date_=find_previous_date(date_)
     query = mycol.find_one({"date": find_next_date(date_)})
     if query is None:
         mycol.insert({'date': find_next_date(date_)})
@@ -241,14 +240,18 @@ def update_database():
     for j in range(len(f_result)):
         symbol = f_result['symbol'][j]
         change = f_result['change'][j]
-        change = buysell(symbol, change, date_)[0]
-
-        with open(r'{0}'.format(file_name), 'a') as f:
-            write = csv.writer(f)
-            write.writerow([symbol, date_, change])
+        exp_holding = f_result['exp_holding'][j]
+        change = buysell(symbol, change, exp_holding, date_)[0]
+        if change == 0:
+            continue
+        else:
+            with open(r'{0}'.format(file_name), 'a') as f:
+                write = csv.writer(f)
+                write.writerow([symbol, date_, change])
     query = mycol_real.find_one({"date": date_})
     tien_kd = query['tong_tai_san'] - int(query['gia_tri_tt'].replace(".",""))
     mycol.update({'date': find_next_date(date_)}, {'$set': {'tien_kd': tien_kd}})
+
 
 
 
@@ -514,6 +517,7 @@ def update_real(date_):
     tong_tai_san =tien_kd + tong_ban -tong_mua + gia_tri_tt
     print('Tong ban', tong_ban)
     print('Tong mua', tong_mua)
+    print('Tien kha dung', tien_kd)
     tien_ban_dau = 2500000000
     lai_lo_tong = tong_tai_san - tien_ban_dau
     print(lai_lo_tong)
@@ -541,7 +545,7 @@ def run_update_real():
 
     update_real(date_)
 if __name__ == "__main__":
-#    time.sleep(900)
+
     run_update_real()
 
 

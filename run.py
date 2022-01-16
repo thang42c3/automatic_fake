@@ -173,7 +173,7 @@ def buysell(symbol, change, exp_holding, date_):
             else:
                 change = 0
 
-    ck_tong = ck_tong + change
+         ck_tong = ck_tong + change
 
 
     if change > 0:
